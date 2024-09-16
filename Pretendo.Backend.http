@@ -1,0 +1,19 @@
+@Pretendo.Backend_HostAddress = http://pretendo.local
+
+GET {{Pretendo.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{Pretendo.Backend_HostAddress}}/api/domain/test/pretendos
+
+
+###
+
+POST http://pretendo.local/api/domain/{domainName}/pretendos
+
+###
+
+GET http://pretendo.local/entrypoint
+
+###

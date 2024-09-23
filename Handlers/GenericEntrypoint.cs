@@ -1,5 +1,7 @@
 ﻿using Pretendo.Backend.Data.DataAccess;
 using Pretendo.Backend.Handlers.Extensions;
+using System.Dynamic;
+using System.Text.Json;
 
 namespace Pretendo.Backend.Handlers
 {
@@ -22,6 +24,16 @@ namespace Pretendo.Backend.Handlers
                 {
                     return Results.Json("Pretendo Not Found", statusCode: 404);
                 }
+                if (pretendo.ReturnObject is not null && pretendo.ReturnObject.IsValidJson())
+                {
+                    dynamic data = JsonSerializer.Deserialize<ExpandoObject>(pretendo.ReturnObject);
+
+                    if (data is not null)
+                    {
+                        return Results.Json(data, statusCode: pretendo.StatusCode);
+                    }
+                }
+
                 return Results.Json(pretendo.ReturnObject, statusCode: pretendo.StatusCode);
             });
         }

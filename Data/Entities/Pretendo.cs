@@ -10,6 +10,7 @@ namespace Pretendo.Backend.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Path { get; set; }
+        public string? Args { get; set; }
         public string ReturnObject { get; set; }
         public Domain? Domain { get; set; }
         public string Name { get; set; }

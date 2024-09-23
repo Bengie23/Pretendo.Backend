@@ -21,6 +21,14 @@ namespace Pretendo.Backend.Handlers
                     {
                         pret.ReturnObject = parsedJson;
                     }
+
+                    var path_pieces = pret.Path.Split('?');
+                    if (path_pieces.Length == 2)
+                    {
+                        pret.Args = path_pieces[1];
+                        pret.Path = path_pieces[0];
+                    }
+
                 }
                 DomainCreator.CreateDomain(domainName);
                 repo.AddPretendo(domainName, pret);

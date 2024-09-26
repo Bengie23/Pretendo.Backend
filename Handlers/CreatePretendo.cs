@@ -17,7 +17,7 @@ namespace Pretendo.Backend.Handlers
                 if (pret is not null)
                 {
                     var parsedJson = pret.ReturnObject.FromPretendoString();
-                    if (parsedJson.IsValidJson())
+                    if (parsedJson.IsValidJson(out _))
                     {
                         pret.ReturnObject = parsedJson;
                     }

@@ -13,9 +13,12 @@ namespace Pretendo.Backend.Handlers.Extensions
             }
             return value;
         }
-        public static bool IsValidJson(this string strInput)
+        public static bool IsValidJson(this string strInput, out bool? isArray)
         {
-            if (strInput.PassesDefaultJsonChecks()){
+            isArray = null;
+            if (strInput.PassesDefaultJsonChecks())
+            {
+                isArray = strInput.IsArray();
                 try
                 {
                     var obj = JToken.Parse(strInput);
@@ -39,13 +42,22 @@ namespace Pretendo.Backend.Handlers.Extensions
             if (!string.IsNullOrWhiteSpace(jsonInput))
             {
                 jsonInput = jsonInput.Trim();
-                if ((jsonInput.StartsWith("{") && jsonInput.EndsWith("}")) || //For object
-                    (jsonInput.StartsWith("[") && jsonInput.EndsWith("]"))) //For array
+                if (jsonInput.IsArray() || jsonInput.IsObject())
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        private static bool IsArray(this string jsonInput)
+        {
+            return (jsonInput.StartsWith("[") && jsonInput.EndsWith("]"));
+        }
+
+        private static bool IsObject(this string jsonInput) 
+        {
+            return ((jsonInput.StartsWith("{") && jsonInput.EndsWith("}")));
         }
     }
 }

@@ -24,14 +24,24 @@ namespace Pretendo.Backend.Handlers
                 {
                     return Results.Json("Pretendo Not Found", statusCode: 404);
                 }
-                if (pretendo.ReturnObject is not null && pretendo.ReturnObject.IsValidJson())
+                if (pretendo.ReturnObject is not null && pretendo.ReturnObject.IsValidJson(out var isArray))
                 {
-                    dynamic data = JsonSerializer.Deserialize<ExpandoObject>(pretendo.ReturnObject);
-
-                    if (data is not null)
+                    dynamic data = null;
+                    if (isArray.HasValue && isArray.Value)
                     {
-                        return Results.Json(data, statusCode: pretendo.StatusCode);
+                         data = JsonSerializer.Deserialize<List<ExpandoObject>>(pretendo.ReturnObject);
                     }
+                    else
+                    {
+                        data = JsonSerializer.Deserialize<ExpandoObject>(pretendo.ReturnObject);
+                    }
+
+                    if (data is null)
+                    {
+                        return Results.Json("Pretendo Not Found", statusCode: 404);
+                    }
+
+                    return Results.Json(data, statusCode: pretendo.StatusCode);
                 }
 
                 return Results.Json(pretendo.ReturnObject, statusCode: pretendo.StatusCode);

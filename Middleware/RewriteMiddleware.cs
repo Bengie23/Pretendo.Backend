@@ -16,7 +16,7 @@ namespace Pretendo.Backend.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments("/api/domain", StringComparison.OrdinalIgnoreCase) || context.Request.Path.StartsWithSegments("/entrypoint", StringComparison.OrdinalIgnoreCase) || context.Request.Path.StartsWithSegments("/favicon.ico", StringComparison.OrdinalIgnoreCase))
+            if (ShouldIgnoreRequest(context))
             {
                 //ignore request
                 await _next(context);
@@ -31,7 +31,8 @@ namespace Pretendo.Backend.Middleware
         {
             return (context.Request.Path.StartsWithSegments("/api/domain", StringComparison.OrdinalIgnoreCase) ||
                     context.Request.Path.StartsWithSegments("/entrypoint", StringComparison.OrdinalIgnoreCase) ||
-                    context.Request.Path.StartsWithSegments("/favicon.ico", StringComparison.OrdinalIgnoreCase));
+                    context.Request.Path.StartsWithSegments("/favicon.ico", StringComparison.OrdinalIgnoreCase) ||
+                    context.Request.Path.StartsWithSegments("/pretendo/ping", StringComparison.OrdinalIgnoreCase));
         }
 
         private string BuildEntrypointUrl(HttpContext context)

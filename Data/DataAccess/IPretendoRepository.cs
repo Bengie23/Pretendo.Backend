@@ -36,6 +36,20 @@ namespace Pretendo.Backend.Data.DataAccess
         public void AddPretendo(string domain, Entities.Pretendo pretendo);
 
         /// <summary>
+        /// Creates a configurable Webhook instance
+        /// </summary>
+        /// <param name="pretendoId"></param>
+        /// <param name="webhook"></param>
+        public void ConfigureWebhook(int pretendoId, ConfigurableWebhook webhook);
+
+        /// <summary>
+        /// Returns a list of Webhooks for given Pretendo
+        /// </summary>
+        /// <param name="pretendoId"></param>
+        /// <returns></returns>
+        public List<ConfigurableWebhook> GetWebhooks(int pretendoId);
+
+        /// <summary>
         /// Performs Initial Data Seed
         /// </summary>
         public void Seed();

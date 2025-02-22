@@ -1,9 +1,11 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Pretendo.Backend.Data.DTOs;
 using Pretendo.Backend.Data.Entities;
 using Pretendo.Backend.Handlers.Extensions;
 using Pretendo.Backend.Scripting;
+using System.Collections;
 
 namespace Pretendo.Backend.Data.DataAccess
 {
@@ -29,6 +31,21 @@ namespace Pretendo.Backend.Data.DataAccess
                 }
             }
 
+        }
+
+        ///<inheritdoc cref="IPretendoRepository.ConfigureWebhook(int, ConfigurableWebhook)"/>
+        public void ConfigureWebhook(int pretendoId, ConfigurableWebhook webhook)
+        {
+            using (var context = new PretendoDbContext())
+            {
+                var pretendo = context.Pretendos.Single(x => x.Id == pretendoId);
+                if (pretendo is null)
+                {
+                    throw new Exception("Unable to configure webhook. Pretendo Not Found");
+                }
+                pretendo.Webhook = webhook;
+                context.SaveChanges();
+            }
         }
 
         ///<inheritdoc cref="IPretendoRepository.FindPretendo(string, string)"/>
@@ -85,6 +102,24 @@ namespace Pretendo.Backend.Data.DataAccess
             }).ToList();
         }
 
+        ///<inheritdoc cref="IPretendoRepository.GetWebhooks(int pretendoId)"/>
+        public List<ConfigurableWebhook> GetWebhooks(int pretendoId)
+        {
+           using (var context = new PretendoDbContext())
+            {
+                var pretendo = context.Pretendos.Include(x => x.Webhook).Where(x => x.Id == pretendoId).FirstOrDefault();
+                if (pretendo is null)
+                {
+                    throw new Exception("Pretendo Not Found");
+                }
+                if (pretendo.Webhook is null)
+                {
+                    return new List<ConfigurableWebhook>();
+                }
+                return new List<ConfigurableWebhook> { pretendo.Webhook };
+            }
+        }
+
         ///<inheritdoc cref="IPretendoRepository.Seed"/>
         public void Seed()
         {
@@ -102,10 +137,10 @@ namespace Pretendo.Backend.Data.DataAccess
                                     ReturnObject = "Hello World", 
                                     StatusCode = 200, 
                                     Name = "Test1", 
-                                    Webhook = new ConfigurableWebhook {
-                                        Url = "https://localhost:7296/api/webhook",
-                                        Payload = @"{ 'Message': 'TEST' }".FromPretendoString(),
-                                    }
+                                    //Webhook = new ConfigurableWebhook {
+                                    //    Url = "https://localhost:7296/api/webhook",
+                                    //    Payload = @"{ 'Message': 'TEST' }".FromPretendoString(),
+                                    //}
                                 }
                             }
                         }

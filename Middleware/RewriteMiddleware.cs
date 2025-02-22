@@ -32,7 +32,8 @@ namespace Pretendo.Backend.Middleware
             return (context.Request.Path.StartsWithSegments("/api/domain", StringComparison.OrdinalIgnoreCase) ||
                     context.Request.Path.StartsWithSegments("/entrypoint", StringComparison.OrdinalIgnoreCase) ||
                     context.Request.Path.StartsWithSegments("/favicon.ico", StringComparison.OrdinalIgnoreCase) ||
-                    context.Request.Path.StartsWithSegments("/pretendo/ping", StringComparison.OrdinalIgnoreCase));
+                    context.Request.Path.StartsWithSegments("/pretendo/ping", StringComparison.OrdinalIgnoreCase) ||
+                    (context.Request.Path.StartsWithSegments("/api/pretendo", StringComparison.OrdinalIgnoreCase) && context.Request.Path.ToString().Contains("webhooks", StringComparison.OrdinalIgnoreCase)));
         }
 
         private string BuildEntrypointUrl(HttpContext context)

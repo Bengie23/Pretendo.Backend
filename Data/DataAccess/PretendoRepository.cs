@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Pretendo.Backend.Data.DTOs;
 using Pretendo.Backend.Data.Entities;
+using Pretendo.Backend.Handlers.Extensions;
 using Pretendo.Backend.Scripting;
 
 namespace Pretendo.Backend.Data.DataAccess
@@ -38,6 +39,7 @@ namespace Pretendo.Backend.Data.DataAccess
             {
                 pretendos = context.Pretendos
                    .Include(x => x.Domain)
+                   .Include(x=>x.Webhook)
                    .Where(x => x.Domain != null)
                    .Where(x => x.Path.Trim('/') == path.Trim('/'))
                    .Where(x => x.Domain.Name == domain)
@@ -95,7 +97,16 @@ namespace Pretendo.Backend.Data.DataAccess
                         new Domain {
                             Name = "pretendo.local",
                             Pretendos = new List<Entities.Pretendo> {
-                                new Entities.Pretendo { Path = "/a/b/c", ReturnObject = "Hello World", StatusCode = 200, Name = "Test1"}
+                                new Entities.Pretendo { 
+                                    Path = "/a/b/c", 
+                                    ReturnObject = "Hello World", 
+                                    StatusCode = 200, 
+                                    Name = "Test1", 
+                                    Webhook = new ConfigurableWebhook {
+                                        Url = "https://localhost:7296/api/webhook",
+                                        Payload = @"{ 'Message': 'TEST' }".FromPretendoString(),
+                                    }
+                                }
                             }
                         }
                     };

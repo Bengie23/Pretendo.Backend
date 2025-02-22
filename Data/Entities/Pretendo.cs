@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pretendo.Backend.Data.Entities
 {
@@ -16,5 +17,10 @@ namespace Pretendo.Backend.Data.Entities
         public string Name { get; set; }
         public int StatusCode { get; set; }
         public HttpVerbs HttpVerb { get; set; }
+        //public Collection<ConfigurableWebhook>? Webhooks { get; set; }
+
+        //or?
+
+        public ConfigurableWebhook? Webhook { get; set; }
     }
 }

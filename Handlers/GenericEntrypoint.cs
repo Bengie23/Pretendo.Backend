@@ -60,14 +60,14 @@ namespace Pretendo.Backend.Handlers
                 {
                     if (pretendo.Webhook is ConfigurableWebhook thisWebhook)
                     {
-                        TriggerWebhook(thisWebhook).GetAwaiter().GetResult();
+                        _ = TriggerWebhook(thisWebhook);
                     }
                 }
             });
         }
         private Data.Entities.Pretendo? FindPretendo(HttpContext httpContext, IPretendoRepository repository)
         {
-            var domain = httpContext.Request.Host.Host;
+            var domain = httpContext.Request.Host.Host.StartsWith("www.") ? httpContext.Request.Host.Host.Replace("www.","") : httpContext.Request.Host.Host;
             var path = httpContext.PretendoPathFromSegments();
             return repository.FindPretendo(domain, path);
         }

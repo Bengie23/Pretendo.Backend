@@ -17,6 +17,11 @@ namespace Pretendo.Backend
             builder.Services.AddAuthorization();
             builder.Services.AddScoped<IPretendoRepository, PretendoRepository>();
             builder.Services.AddHandlers(typeof(Program).Assembly);
+            builder.Services.ConfigureHttpJsonOptions(options =>
+            {
+                options.SerializerOptions.WriteIndented = true;
+                options.SerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            });
             PretendoDBSeed.Initialize();
             var app = builder.Build();
 

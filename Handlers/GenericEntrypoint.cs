@@ -15,6 +15,10 @@ namespace Pretendo.Backend.Handlers
         {
             app.MapGet("/entrypoint", (HttpContext httpContext, IPretendoRepository repository) =>
             {
+                JsonSerializerOptions options = new JsonSerializerOptions()
+                {
+                    WriteIndented = true
+                };
                 if (!httpContext.RequestContainsSegments())
                 {
                     return Results.Json("Listening for pretendos");
@@ -34,11 +38,11 @@ namespace Pretendo.Backend.Handlers
                         dynamic data = null;
                         if (isArray.HasValue && isArray.Value)
                         {
-                            data = JsonSerializer.Deserialize<List<ExpandoObject>>(pretendo.ReturnObject);
+                            data = JsonSerializer.Deserialize<List<ExpandoObject>>(pretendo.ReturnObject, options);
                         }
                         else
                         {
-                            data = JsonSerializer.Deserialize<ExpandoObject>(pretendo.ReturnObject);
+                            data = JsonSerializer.Deserialize<ExpandoObject>(pretendo.ReturnObject, options);
                         }
 
                         if (data is null)
@@ -46,7 +50,8 @@ namespace Pretendo.Backend.Handlers
                             return Results.Json("Pretendo Not Found", statusCode: 404);
                         }
                         // returns json data
-                        return Results.Json(data, statusCode: pretendo.StatusCode);
+
+                        return Results.Json(data, options, statusCode: pretendo.StatusCode);
                     }
                     //returns text data
                     return Results.Json(pretendo.ReturnObject, statusCode: pretendo.StatusCode);

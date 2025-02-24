@@ -35,7 +35,7 @@ namespace Pretendo.Backend.Handlers
                     //If there is return object and is valid json
                     if (pretendo.ReturnObject is not null && pretendo.ReturnObject.IsValidJson(out var isArray))
                     {
-                        dynamic data = null;
+                        dynamic? data;
                         if (isArray.HasValue && isArray.Value)
                         {
                             data = JsonSerializer.Deserialize<List<ExpandoObject>>(pretendo.ReturnObject, options);
@@ -63,7 +63,7 @@ namespace Pretendo.Backend.Handlers
                 }
                 finally
                 {
-                    if (pretendo.Webhook is ConfigurableWebhook thisWebhook)
+                    if (!somethingWentWrong && pretendo.Webhook is ConfigurableWebhook thisWebhook)
                     {
                         _ = TriggerWebhook(thisWebhook);
                     }

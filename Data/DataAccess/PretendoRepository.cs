@@ -51,15 +51,14 @@ namespace Pretendo.Backend.Data.DataAccess
         ///<inheritdoc cref="IPretendoRepository.FindPretendo(string, string)"/>
         public Entities.Pretendo? FindPretendo(string domain, string path)
         {
-            List<Entities.Pretendo> pretendos = null;
+            List<Entities.Pretendo>? pretendos = null;
             using (var context = new PretendoDbContext())
             {
                 pretendos = context.Pretendos
                    .Include(x => x.Domain)
                    .Include(x=>x.Webhook)
-                   .Where(x => x.Domain != null)
                    .Where(x => x.Path.Trim('/') == path.Trim('/'))
-                   .Where(x => x.Domain.Name == domain)
+                   .Where(x => x.Domain!.Name == domain)
                    .ToList();
             }
             if (pretendos.Count > 1)

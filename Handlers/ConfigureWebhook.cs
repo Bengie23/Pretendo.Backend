@@ -1,11 +1,6 @@
-﻿
-using Microsoft.Extensions.ObjectPool;
+﻿using Microsoft.AspNetCore.Mvc;
 using Pretendo.Backend.Data.DataAccess;
 using Pretendo.Backend.Handlers.Extensions;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
-using System.Web.Http;
 
 namespace Pretendo.Backend.Handlers
 {
@@ -15,7 +10,7 @@ namespace Pretendo.Backend.Handlers
         ///<inheritdoc cref="IHandler.MapHandler(IEndpointRouteBuilder)"/>
         public void MapHandler(IEndpointRouteBuilder app)
         {
-            app.MapPost("/api/pretendo/{pretendoId}/webhooks", async ([FromUri] int pretendoId, HttpRequest request, IPretendoRepository repo) =>
+            app.MapPost("/api/pretendo/{pretendoId}/webhooks", async ([FromRoute] int pretendoId, HttpRequest request, IPretendoRepository repo) =>
             {
                 Data.Entities.ConfigurableWebhook? webhook = await request.ReadFromJsonAsync<Data.Entities.ConfigurableWebhook>();
                 if (webhook is not null)

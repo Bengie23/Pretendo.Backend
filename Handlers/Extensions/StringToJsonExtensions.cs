@@ -24,14 +24,9 @@ namespace Pretendo.Backend.Handlers.Extensions
                     var obj = JToken.Parse(strInput);
                     return true;
                 }
-                catch (JsonReaderException jex)
-                {
-                    //Exception in parsing json
-                    Console.WriteLine(jex.Message);
-                }
                 catch (Exception ex) //some other exception
                 {
-                    Console.WriteLine(ex.ToString());
+                    //eating exception to just return ValidJson = false
                 }
             }
             return false;

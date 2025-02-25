@@ -8,9 +8,12 @@ namespace Pretendo.Backend
 {
     public class Program
     {
+        protected static ILogger? Logger;
         public static void Main(string[] args)
         {
-            if (!IsCurrentProcessElevated()) { Console.WriteLine("Pretendo.Backend requires elevated access."); }
+            using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+            Logger = factory.CreateLogger<Program>();
+            if (!IsCurrentProcessElevated()) { Logger.LogError("Pretendo.Backend requires elevated access."); }
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

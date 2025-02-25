@@ -21,7 +21,6 @@ namespace Pretendo.Backend.Handlers
         {
             app.MapGet("/entrypoint", (HttpContext httpContext, IPretendoRepository repository) =>
             {
-                logger.LogInformation("Processing Request Started:{host}{path}", httpContext.Request.Host.Host, httpContext.Request.Path.Value);
                 JsonSerializerOptions options = new JsonSerializerOptions()
                 {
                     WriteIndented = true

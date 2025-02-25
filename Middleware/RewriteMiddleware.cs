@@ -14,7 +14,7 @@ namespace Pretendo.Backend.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, ILogger<RewriteMiddleware> logger)
         {
             if (ShouldIgnoreRequest(context))
             {
@@ -23,6 +23,7 @@ namespace Pretendo.Backend.Middleware
                 return;
             }
             var url = BuildEntrypointUrl(context);
+            logger.LogWarning("Processing request {request}", context.Request.Host + context.Request.Path);
             context.Response.Redirect(url);
             return;
         }

@@ -1,6 +1,7 @@
 {
   "profiles": {
-    "https": {
+
+    "default": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "entrypoint",
@@ -9,6 +10,16 @@
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://pretendo.local;http://pretendo.local"
+    },
+    "nginx": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "entrypoint",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://pretendo.local:5001;http://pretendo.local:5000"
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",

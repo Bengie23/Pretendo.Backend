@@ -8,7 +8,7 @@ namespace Pretendo.Backend.Handlers
         ///<inheritdoc cref="IHandler.MapHandler(IEndpointRouteBuilder)"/>
         public void MapHandler(IEndpointRouteBuilder app)
         {
-            app.MapGet("/api/domain", (HttpContext httpContext, IPretendoRepository repository) =>
+            app.MapGet("/api/domains", (HttpContext httpContext, IPretendoRepository repository) =>
             {
                 var domains = repository.GetDomainList();
                 return domains.Select(x => x.Name).Distinct().ToList();

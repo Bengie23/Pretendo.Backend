@@ -18,7 +18,7 @@ namespace Pretendo.Backend.Middleware
         {
             if (ShouldIgnoreRequest(context))
             {
-                //ignore request
+                //ignore means do not redirect
                 await _next(context);
                 return;
             }
@@ -30,7 +30,8 @@ namespace Pretendo.Backend.Middleware
 
         private bool ShouldIgnoreRequest(HttpContext context)
         {
-            return (context.Request.Path.StartsWithSegments("/api/domain", StringComparison.OrdinalIgnoreCase) ||
+            return (context.Request.Path.StartsWithSegments("/api/domains", StringComparison.OrdinalIgnoreCase) ||
+                    context.Request.Path.StartsWithSegments("/api/domain", StringComparison.OrdinalIgnoreCase) ||
                     context.Request.Path.StartsWithSegments("/entrypoint", StringComparison.OrdinalIgnoreCase) ||
                     context.Request.Path.StartsWithSegments("/favicon.ico", StringComparison.OrdinalIgnoreCase) ||
                     context.Request.Path.StartsWithSegments("/pretendo/ping", StringComparison.OrdinalIgnoreCase) ||

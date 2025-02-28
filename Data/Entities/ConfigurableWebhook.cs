@@ -8,5 +8,6 @@ namespace Pretendo.Backend.Data.Entities
         public int Id { get; set; }
         public string Url { get; set; }
         public string Payload { get; set; }
+        public HttpVerbs HttpVerb { get; set; }
     }
 }

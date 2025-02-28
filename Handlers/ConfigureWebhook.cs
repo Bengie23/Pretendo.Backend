@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pretendo.Backend.Data.DataAccess;
+using Pretendo.Backend.Data.DTOs;
+using Pretendo.Backend.Data.Entities;
 using Pretendo.Backend.Handlers.Extensions;
 
 namespace Pretendo.Backend.Handlers
@@ -12,9 +14,10 @@ namespace Pretendo.Backend.Handlers
         {
             app.MapPost("/api/pretendo/{pretendoId}/webhooks", async ([FromRoute] int pretendoId, HttpRequest request, IPretendoRepository repo) =>
             {
-                Data.Entities.ConfigurableWebhook? webhook = await request.ReadFromJsonAsync<Data.Entities.ConfigurableWebhook>();
-                if (webhook is not null)
+                ConfigurableWebhookDTO? dto = await request.ReadFromJsonAsync<ConfigurableWebhookDTO>();
+                if (dto is not null)
                 {
+                    ConfigurableWebhook webhook = dto.ToEntity();
                     var parsedJson = webhook.Payload.FromPretendoString();
                     if (parsedJson.IsValidJson(out _))
                     {

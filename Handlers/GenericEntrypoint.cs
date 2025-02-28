@@ -94,13 +94,22 @@ namespace Pretendo.Backend.Handlers
             logger.LogInformation("Calling configured webhook");
             using (var httpClient = new HttpClient())
             {
-                StringContent content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(thisWebhook.Payload), Encoding.UTF8, "application/json");
-
-                using (var response = await httpClient.PostAsync(thisWebhook.Url, content))
+                var method = GetHttpMethod(thisWebhook);
+                HttpRequestMessage request = new HttpRequestMessage(method, thisWebhook.Url);
+                if (method == HttpMethod.Post)
+                {
+                    request.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(thisWebhook.Payload), Encoding.UTF8, "application/json");
+                }
+                using (var response = await httpClient.SendAsync(request))
                 {
                     logger.LogInformation("Configured Webhook responded with status code: {0}", response.StatusCode);
                 }
             }
+        }
+
+        private HttpMethod GetHttpMethod(ConfigurableWebhook webhook)
+        {
+            return webhook.HttpVerb == HttpVerbs.Get ? HttpMethod.Get : HttpMethod.Post;
         }
     }
 }

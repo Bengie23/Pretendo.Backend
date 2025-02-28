@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using Pretendo.Backend.Data.DataAccess;
+using Pretendo.Backend.Data.DTOs;
 
 namespace Pretendo.Backend.Handlers
 {
@@ -13,7 +14,7 @@ namespace Pretendo.Backend.Handlers
         {
             app.MapGet("/api/pretendo/{pretendoId}/webhooks", ([FromRoute] int pretendoId, HttpRequest request, IPretendoRepository repo) =>
             {
-                var webhooks = repo.GetWebhooks(pretendoId);
+                var webhooks = repo.GetWebhooks(pretendoId).Select(x=> x.ToDTO());
                 return webhooks;
 
             });

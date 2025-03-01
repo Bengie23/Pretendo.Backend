@@ -77,8 +77,18 @@ namespace Pretendo.Backend.Handlers
                     logger.LogInformation("Loading Pretendo's configured Webhook(s)...");
                     if (!somethingWentWrong && pretendo.Webhook is ConfigurableWebhook thisWebhook)
                     {
+                        var delay = thisWebhook.Delay * 1000;
                         logger.LogInformation("Webhook found.");
-                        _ = TriggerWebhook(thisWebhook);
+                        Task.Factory.StartNew(() =>
+                        {
+                            //do nothing
+                            logger.LogInformation("Delaying {seconds} seconds", delay);
+                        })
+                        .ContinueWith(task =>
+                        {
+                            Thread.Sleep(delay);
+                            _ = TriggerWebhook(thisWebhook);
+                        });
                     }
                 }
             });

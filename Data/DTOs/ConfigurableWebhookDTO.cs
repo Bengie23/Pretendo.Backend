@@ -11,6 +11,8 @@ namespace Pretendo.Backend.Data.DTOs
         public string Payload { get; set; }
 
         public string HttpVerb { get; set; }
+
+        public int Delay { get; set; }
     }
 
     /// <summary>
@@ -46,6 +48,7 @@ namespace Pretendo.Backend.Data.DTOs
                 Url = dto.Url,
                 Payload = dto.Payload,
                 HttpVerb = dto.HttpVerb.ToEnum(),
+                Delay = dto.Delay,
             };
         }
 
@@ -61,6 +64,7 @@ namespace Pretendo.Backend.Data.DTOs
                 Url = entity.Url,
                 Payload = entity.Payload,
                 HttpVerb = entity.HttpVerb.ToString().ToUpper(),
+                Delay = entity.Delay,
             };
         }
     }

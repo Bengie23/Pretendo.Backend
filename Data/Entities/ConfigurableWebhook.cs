@@ -9,5 +9,6 @@ namespace Pretendo.Backend.Data.Entities
         public string Url { get; set; }
         public string Payload { get; set; }
         public HttpVerbs HttpVerb { get; set; }
+        public int Delay { get; set; }
     }
 }

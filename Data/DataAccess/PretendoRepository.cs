@@ -97,7 +97,8 @@ namespace Pretendo.Backend.Data.DataAccess
                 Name = x.Name,
                 Path = x.Path,
                 ReturnObject = x.ReturnObject,
-                StatusCode = x.StatusCode
+                StatusCode = x.StatusCode,
+                AvailableUrls = GenerateUrls(domain, x.Path)
             }).ToList();
         }
 
@@ -174,6 +175,15 @@ namespace Pretendo.Backend.Data.DataAccess
                 }
             }
             return domain;
+        }
+        private List<string> GenerateUrls(string domainName, string path)
+        {
+            return new List<string>()
+            {
+                $"http://{domainName}{path}",
+                $"https://{domainName}{path}",
+                $"www.{domainName}{path}",
+            };
         }
     }
 

@@ -10,5 +10,7 @@
         public string ReturnObject { get; set; }
         public string Name { get; set; }
         public int StatusCode { get; set; }
+
+        public List<string> AvailableUrls { get; set; }
     }
 }

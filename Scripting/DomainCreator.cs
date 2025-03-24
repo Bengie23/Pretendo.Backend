@@ -13,6 +13,16 @@
         /// <param name="domainName"></param>
         public static void CreateDomain(string domainName)
         {
+            CreateDomain(domainName, false);
+            CreateDomain(domainName, true);
+        }
+
+        private static void CreateDomain(string domainName, bool useWww)
+        {
+            if (useWww)
+            {
+                domainName = $"www.{domainName}";
+            }
             "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted; Get-ExecutionPolicy".ExecutePowerShell();
 
             var script = String.Format(@".\Scripting\echo.ps1 -Hostname {0}", domainName);

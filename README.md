@@ -1,5 +1,5 @@
 # What is Pretendo?
-Pretendo is a local mock server intended to help developers accelerate their testing, improve code simplicty and, in the future, facilitate testing during CI/CD stages.[More Info](https://github.com/Bengie23/Pretendo_Frontend)
+Pretendo is a local mock server intended to help developers accelerate their testing, improve code simplicty and, in the future, facilitate testing during CI/CD stages.The current version of Pretendo.Backend requires the frontend to work, [More Info](https://github.com/Bengie23/Pretendo_Frontend)
 # What is Pretendo.Backend?
 Since Pretendo is a **local** mock server, all custom endpoints will be caught and satisfied at a local level, hence Pretendo.Backend is required to be running only locally.
 # Features

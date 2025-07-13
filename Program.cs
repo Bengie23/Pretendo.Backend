@@ -25,6 +25,8 @@ namespace Pretendo.Backend
                 options.SerializerOptions.WriteIndented = true;
                 options.SerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
             });
+
+            builder.WebHost.UseUrls("http://pretendo.local", "https://pretendo.local");
             PretendoDBSeed.Initialize();
             var app = builder.Build();
 

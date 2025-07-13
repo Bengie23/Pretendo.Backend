@@ -56,7 +56,7 @@ jobs:
         name: Release v${{ github.run_number }}
         files: |
           ./publish/*.exe
-          ./publish/*.dll
+          ./publish/Pretendo.Backend.dll
           ./publish/*.json
           ./publish/*.config
         generate_release_notes: true

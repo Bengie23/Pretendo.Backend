@@ -57,6 +57,7 @@ jobs:
         files: |
           ./publish/*.exe
           ./publish/Pretendo.Backend.dll
+          ./publish/Microsoft.EntityFrameworkCore*.dll
           ./publish/*.json
           ./publish/*.config
         generate_release_notes: true

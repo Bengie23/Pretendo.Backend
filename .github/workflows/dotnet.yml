@@ -1,29 +1,57 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET CI
+name: .NET Core API CI
 
 on:
   push:
     branches: [ "master" ]
+  create:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_VERSION: '8.0.x'  # Change to your target .NET version (6.0.x, 7.0.x, 8.0.x, etc.)
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
     - name: Restore dependencies
       run: dotnet restore
+    
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v4.1.8
-            
+      run: dotnet build --configuration Release --no-restore --verbosity normal
+    
+    - name: Run tests
+      run: dotnet test --configuration Release --no-build --verbosity normal
+    
+    - name: Publish
+      run: dotnet publish --configuration Release --no-build --output ./publish --self-contained --runtime win-x64
+    
+    - name: Upload published API as artifact
+      uses: actions/upload-artifact@v4.6.0
+      with:
+        name: published-api
+        path: ./publish/
+    
+    - name: Create Release
+      if: github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ github.run_number }}
+        name: Release v${{ github.run_number }}
+        files: |
+          ./publish/*.exe
+          ./publish/**/*
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

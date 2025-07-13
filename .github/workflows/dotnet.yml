@@ -47,7 +47,10 @@ jobs:
       with:
         name: published-api
         path: ./publish/
-    
+    - name: Create ZIP package
+      run: |
+        Compress-Archive -Path "./publish/*" -DestinationPath "./Pretendo.Backend-v${{ github.run_number }}.zip"
+       
     - name: Create Release
       if: github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v2
@@ -55,7 +58,7 @@ jobs:
         tag_name: v${{ github.run_number }}
         name: Release v${{ github.run_number }}
         files: |
-          ./publish/**/*
+          ./Pretendo.Backend-v${{ github.run_number }}.zip
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

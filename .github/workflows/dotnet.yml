@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 env:
-  DOTNET_VERSION: '8.0.14'  # Change to your target .NET version (6.0.x, 7.0.x, 8.0.x, etc.)
+  DOTNET_VERSION: '8.0.x'  # Change to your target .NET version (6.0.x, 7.0.x, 8.0.x, etc.)
 
 jobs:
   build:

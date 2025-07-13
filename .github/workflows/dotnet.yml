@@ -51,7 +51,6 @@ jobs:
         name: Release v${{ github.run_number }}
         files: |
           ./publish/*.exe
-          ./publish/**/*
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

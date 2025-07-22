@@ -1,7 +1,9 @@
 using Pretendo.Backend.Data.DataAccess;
 using Pretendo.Backend.Handlers.Extensions;
 using Pretendo.Backend.Middleware;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 
 namespace Pretendo.Backend
@@ -32,6 +34,26 @@ namespace Pretendo.Backend
             });
 
             builder.WebHost.UseUrls("http://pretendo.local", "https://pretendo.local");
+            Logger.LogWarning(Path.GetDirectoryName(new Uri(Assembly.GetCallingAssembly().Location).LocalPath));
+            if (builder.Environment.IsProduction())
+            {
+                string? path = Environment.GetEnvironmentVariable("PRETENDO_LOCAL_CERT_PATH");
+                string? key = Environment.GetEnvironmentVariable("PRETENDO_LOCAL_CERT_KEY");
+                if (!string.IsNullOrWhiteSpace(path) && !string.IsNullOrWhiteSpace(key))
+                {
+                    Logger.LogWarning("Configuring HTTP Certificate");
+                    builder.WebHost.ConfigureKestrel(options =>
+                    {
+                        options.ConfigureHttpsDefaults(httpsOptions =>
+                        {
+                            httpsOptions.ServerCertificateSelector = (connectionContext, name) =>
+                            {
+                                return new X509Certificate2(path, key);
+                            };
+                        });
+                    });
+                }
+            }
             PretendoDBSeed.Initialize();
             var app = builder.Build();
 

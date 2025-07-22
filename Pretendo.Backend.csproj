@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PlatformTarget>x64</PlatformTarget>
+    <!-- Certificate configuration -->
+    <CertificateFileName>$([System.Environment]::GetEnvironmentVariable('PRETENDO_LOCAL_CERT_NAME'))</CertificateFileName>
+    <CertificatePassword>$([System.Environment]::GetEnvironmentVariable('PRETENDO_LOCAL_CERT_KEY'))</CertificatePassword>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,4 +18,25 @@
  <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+<!-- Generate certificate only during publish -->
+  <Target Name="GenerateCertificate" BeforeTargets="Publish" Condition="'$(PublishProtocol)' != '' OR '$(PublishUrl)' != '' OR '$(IsPublishing)' == 'true'">
+        
+    <Message Text="Generating HTTPS certificate for Windows Service..." Importance="high" />
+    <Message Text="Using certificate password from environment variable: $(CertificatePassword)" Importance="normal"/>
+    
+    <!-- Clean existing certificate -->
+    <Exec Command="dotnet dev-certs https --clean" 
+          ContinueOnError="true" 
+          IgnoreExitCode="true" />
+    
+    <!-- Generate and trust certificate -->
+    <Exec Command="dotnet dev-certs https --trust" 
+          ContinueOnError="true" />
+    
+    <!-- Export certificate to publish directory -->
+    <Exec Command="dotnet dev-certs https -ep &quot;$(PublishDir)$(CertificateFileName)&quot; -p $(CertificatePassword)" 
+          ContinueOnError="false" />
+    
+    <Message Text="Certificate generated: $(PublishDir)$(CertificateFileName)" Importance="high" />
+  </Target>
 </Project>

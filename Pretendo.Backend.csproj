@@ -23,14 +23,7 @@
         
     <Message Text="Generating HTTPS certificate for Windows Service..." Importance="high" />
     <Message Text="Using certificate password from environment variable: $(CertificatePassword)" Importance="high"/>
-    <!-- Clean existing certificate -->
-    <Exec Command="dotnet dev-certs https --clean --quiet" 
-          ContinueOnError="true" 
-          IgnoreExitCode="true" />
-    
-    <!-- Generate and trust certificate -->
-    <Exec Command="dotnet dev-certs https --trust --quiet" 
-          ContinueOnError="true" />
+
     <!-- Export certificate to publish directory -->
     <Exec Command="dotnet dev-certs https -ep &quot;$(PublishDir)$(CertificateFileName)&quot; -p $(CertificatePassword)" 
           ContinueOnError="false" />

@@ -28,3 +28,13 @@ Else {
     Add-Content -Encoding UTF8  $hostsFilePath ("$DesiredIP".PadRight(20, " ") + "$Hostname" + "$([Environment]::NewLine)")
     Write-Host " done"
 }
+
+ # Optional: Flush DNS cache
+Write-Host "Flushing DNS cache..." -ForegroundColor Yellow
+try {
+    Invoke-Expression "ipconfig /flushdns" | Out-Null
+    Write-Host "DNS cache flushed" -ForegroundColor Green
+}
+catch {
+    Write-Warning "Could not flush DNS cache, but hosts entry was added successfully"
+}

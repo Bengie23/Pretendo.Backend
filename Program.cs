@@ -18,10 +18,11 @@ namespace Pretendo.Backend
             if (!IsCurrentProcessElevated()) { Logger.LogError("Pretendo.Backend requires elevated access."); }
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Host.UseWindowsService(options =>
-            {
-                options.ServiceName = "pretendo-local-mocks";
-            });
+            builder.Host
+                .UseWindowsService(options =>
+                {
+                    options.ServiceName = "pretendo-local-mocks";
+                });
 
             // Add services to the container.
             builder.Services.AddAuthorization();
@@ -41,15 +42,14 @@ namespace Pretendo.Backend
                 string? key = Environment.GetEnvironmentVariable("PRETENDO_LOCAL_CERT_KEY");
                 if (!string.IsNullOrWhiteSpace(path) && !string.IsNullOrWhiteSpace(key))
                 {
-                    Logger.LogWarning("Configuring HTTP Certificate");
+                    Logger.LogWarning($"Configuring HTTP Certificate for path: { path} with key {key}");
                     builder.WebHost.ConfigureKestrel(options =>
                     {
-                        options.ConfigureHttpsDefaults(httpsOptions =>
+                        options.ListenLocalhost(80);
+                        options.ListenLocalhost(8080);
+                        options.ListenLocalhost(443, listenOptions =>
                         {
-                            httpsOptions.ServerCertificateSelector = (connectionContext, name) =>
-                            {
-                                return new X509Certificate2(path, key);
-                            };
+                            listenOptions.UseHttps(path, key);
                         });
                     });
                 }
@@ -83,6 +83,5 @@ namespace Pretendo.Backend
             // 0 is the ID of the root user
             return geteuid() == 0;
         }
-
     }
 }

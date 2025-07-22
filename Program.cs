@@ -16,6 +16,11 @@ namespace Pretendo.Backend
             if (!IsCurrentProcessElevated()) { Logger.LogError("Pretendo.Backend requires elevated access."); }
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Host.UseWindowsService(options =>
+            {
+                options.ServiceName = "pretendo-local-mocks";
+            });
+
             // Add services to the container.
             builder.Services.AddAuthorization();
             builder.Services.AddScoped<IPretendoRepository, PretendoRepository>();

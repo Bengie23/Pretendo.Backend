@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.7" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.5" />
   </ItemGroup>
  <PropertyGroup>

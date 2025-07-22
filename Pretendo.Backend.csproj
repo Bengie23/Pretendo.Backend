@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PlatformTarget>x64</PlatformTarget>
     <!-- Certificate configuration -->
-    <CertificateFileName>$([System.Environment]::GetEnvironmentVariable('PRETENDO_LOCAL_CERT_NAME'))</CertificateFileName>
-    <CertificatePassword>$([System.Environment]::GetEnvironmentVariable('PRETENDO_LOCAL_CERT_KEY'))</CertificatePassword>
+    <CertificateFileName>pretendo-https.pfx</CertificateFileName>
+    <CertificatePassword>c7151e08-47b8-46a8-8bb3-68524f9f2754</CertificatePassword>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,8 +22,15 @@
   <Target Name="GenerateCertificate" BeforeTargets="Publish" Condition="'$(PublishProtocol)' != '' OR '$(PublishUrl)' != '' OR '$(IsPublishing)' == 'true'">
         
     <Message Text="Generating HTTPS certificate for Windows Service..." Importance="high" />
-    <Message Text="Using certificate password from environment variable: $(CertificatePassword)" Importance="normal"/>
-
+    <Message Text="Using certificate password from environment variable: $(CertificatePassword)" Importance="high"/>
+    <!-- Clean existing certificate -->
+    <Exec Command="dotnet dev-certs https --clean --quiet" 
+          ContinueOnError="true" 
+          IgnoreExitCode="true" />
+    
+    <!-- Generate and trust certificate -->
+    <Exec Command="dotnet dev-certs https --trust --quiet" 
+          ContinueOnError="true" />
     <!-- Export certificate to publish directory -->
     <Exec Command="dotnet dev-certs https -ep &quot;$(PublishDir)$(CertificateFileName)&quot; -p $(CertificatePassword)" 
           ContinueOnError="false" />

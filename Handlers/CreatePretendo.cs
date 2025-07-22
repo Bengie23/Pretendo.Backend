@@ -8,6 +8,13 @@ namespace Pretendo.Backend.Handlers
     ///<inheritdoc cref="IHandler"/>
     public class CreatePretendo : IHandler
     {
+        private const string localhost = "127.0.0.1";
+        private readonly ILogger<CreatePretendo> logger;
+
+        public CreatePretendo(ILogger<CreatePretendo> logger)
+        {
+            this.logger = logger;
+        }
         ///<inheritdoc cref="IHandler.MapHandler(IEndpointRouteBuilder)"/>
         public void MapHandler(IEndpointRouteBuilder app)
         {
@@ -32,8 +39,26 @@ namespace Pretendo.Backend.Handlers
                     DomainCreator.CreateDomain(domainName);
                     repo.AddPretendo(domainName, pret);
                 }
+                var checker = IsDnsWorking(domainName);
+                if (!checker)
+                {
+                    logger.LogError("Unable to register local mock in DNS.");
+                }
                 return StatusCodes.Status200OK;
             });
+        }
+
+        private bool IsDnsWorking(string domain)
+        {
+            try
+            {
+                return System.Net.Dns.GetHostEntry(domain).AddressList
+                    .Any(ip => ip.ToString() == localhost);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -49,7 +49,7 @@ jobs:
         path: ./publish/
     - name: Create ZIP package
       run: |
-        Compress-Archive -Path "./publish/*" -DestinationPath "./Pretendo.Backend-v${{ github.run_number }}.zip"
+        Compress-Archive -Path "./publish/*" -DestinationPath "./Pretendo.Backend.zip"
        
     - name: Create Release
       if: github.ref == 'refs/heads/master'
@@ -58,7 +58,7 @@ jobs:
         tag_name: v${{ github.run_number }}
         name: Release v${{ github.run_number }}
         files: |
-          ./Pretendo.Backend-v${{ github.run_number }}.zip
+          ./Pretendo.Backend.zip
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
